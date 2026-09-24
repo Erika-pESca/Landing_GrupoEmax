@@ -102,7 +102,7 @@ interface ChatMessage {
   actionHref?: string;
 }
 
-export const FaqChatbot: React.FC = () => {
+export const ChatbotAsistente: React.FC = () => {
   const [viewMode, setViewMode] = useState<"chat" | "accordion">("chat");
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -125,7 +125,7 @@ export const FaqChatbot: React.FC = () => {
   }, [messages, isTyping, viewMode]);
 
   const handleSelectFaq = (faq: FaqItem) => {
-    // Add user message
+    // Agregar mensaje del usuario
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       sender: "user",
@@ -136,7 +136,7 @@ export const FaqChatbot: React.FC = () => {
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
 
-    // Simulate realistic typing
+    // Simular escritura realista del bot
     setTimeout(() => {
       const botMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -168,7 +168,7 @@ export const FaqChatbot: React.FC = () => {
     setIsTyping(true);
 
     setTimeout(() => {
-      // Find matching FAQ
+      // Buscar coincidencia en las preguntas frecuentes
       const matchedFaq = FAQ_DATA.find((faq) =>
         query.split(" ").some(
           (word) =>

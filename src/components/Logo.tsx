@@ -10,7 +10,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "", variant = "dark" }) 
 
   return (
     <div className={`flex items-center gap-2.5 font-sans select-none ${className}`}>
-      {/* Icon: Modern energy hexagon with electric pulse */}
+      {/* Ícono: Hexágono de energía moderno con pulso eléctrico */}
       <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 via-cyan-500 to-emerald-400 p-[2px] shadow-sm shadow-sky-500/20">
         <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
           <svg
@@ -31,7 +31,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "", variant = "dark" }) 
         </span>
       </div>
 
-      {/* Brand Text */}
+      {/* Texto de la marca */}
       <div className="flex flex-col leading-none">
         <div className="flex items-center gap-1">
           <span className={`text-xl font-extrabold tracking-tight ${isDark ? "text-slate-900" : "text-white"}`}>

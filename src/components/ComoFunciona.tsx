@@ -3,7 +3,7 @@
 import React from "react";
 import { UploadCloud, SearchCheck, CheckCircle2, ArrowRight } from "lucide-react";
 
-export const HowItWorks: React.FC = () => {
+export const ComoFunciona: React.FC = () => {
   const steps = [
     {
       number: "01",

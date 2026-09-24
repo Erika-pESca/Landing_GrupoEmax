@@ -21,7 +21,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 
-export const LeadForm: React.FC = () => {
+export const Formulario: React.FC = () => {
   const [clientType, setClientType] = useState<"particular" | "autonomo" | "empresa">("particular");
   const [supplyType, setSupplyType] = useState<"luz" | "gas" | "dual">("dual");
   const [fullName, setFullName] = useState("");
@@ -65,14 +65,14 @@ export const LeadForm: React.FC = () => {
 
     setIsLoading(true);
 
-    // Simulate server action processing
+    // Simular procesamiento de servidor
     setTimeout(() => {
       setIsLoading(false);
       const generatedTicket = `EMAX-${Math.floor(1000 + Math.random() * 9000)}`;
       setTicketNumber(generatedTicket);
       setIsSubmitted(true);
 
-      // Launch celebratory confetti
+      // Lanzar confeti de celebración
       try {
         confetti({
           particleCount: 100,
@@ -80,7 +80,7 @@ export const LeadForm: React.FC = () => {
           origin: { y: 0.6 },
         });
       } catch (err) {
-        // Safe fallback
+        // Captura segura en caso de fallo
       }
     }, 1200);
   };

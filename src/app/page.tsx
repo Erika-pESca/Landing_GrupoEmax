@@ -1,57 +1,49 @@
-import { Navbar } from "@/components/Navbar";
+import { Navegacion } from "@/components/Navegacion";
 import { Hero } from "@/components/Hero";
-import { ProblemSection } from "@/components/ProblemSection";
-import { SolutionSection } from "@/components/SolutionSection";
-import { SavingsSimulator } from "@/components/SavingsSimulator";
-import { BenefitsSection } from "@/components/BenefitsSection";
-import { HowItWorks } from "@/components/HowItWorks";
-import { Testimonials } from "@/components/Testimonials";
-import { FaqChatbot } from "@/components/FaqChatbot";
-import { LeadForm } from "@/components/LeadForm";
+import { Problema } from "@/components/Problema";
+import { Solucion } from "@/components/Solucion";
+import { SimuladorAhorro } from "@/components/SimuladorAhorro";
+import { Beneficios } from "@/components/Beneficios";
+import { Testimonios } from "@/components/Testimonios";
+import { Formulario } from "@/components/Formulario";
 import { Footer } from "@/components/Footer";
-import { FloatingContact } from "@/components/FloatingContact";
+import { ContactoFlotante } from "@/components/ContactoFlotante";
 
 export default function Home() {
   return (
     <div className="relative min-h-screen flex flex-col bg-slate-50 text-slate-900 overflow-x-hidden">
-      {/* Fixed Navigation */}
-      <Navbar />
+      {/* Navegación fija */}
+      <Navegacion />
 
-      {/* Main Landing Sections */}
+      {/* Secciones principales de la landing */}
       <main className="flex-1 flex flex-col">
-        {/* 1. Hero Section with Value Proposition and Invoice Audit Card */}
+        {/* 1. Hero principal con propuesta de valor */}
         <Hero />
 
-        {/* 2. Customer Pain Points: The Problem */}
-        <ProblemSection />
+        {/* 2. Puntos de dolor: El problema del cliente */}
+        <Problema />
 
-        {/* 3. The 360° EMAX Solution: Independent Energy Center */}
-        <SolutionSection />
+        {/* 3. La solución EMAX 360° */}
+        <Solucion />
 
-        {/* 4. Interactive Energy Savings Simulator */}
-        <SavingsSimulator />
+        {/* 4. Simulador interactivo de ahorro energético */}
+        <SimuladorAhorro />
 
-        {/* 5. Core Benefits (3 to 6 Key Benefits) */}
-        <BenefitsSection />
+        {/* 5. Beneficios clave y Cómo Funciona combinados */}
+        <Beneficios />
 
-        {/* 6. How It Works (3 Clear Steps) */}
-        <HowItWorks />
+        {/* 7. Casos reales y testimonios */}
+        <Testimonios />
 
-        {/* 7. Real Case Studies & Testimonials */}
-        <Testimonials />
-
-        {/* 8. Interactive FAQ Chatbot Assistant ("Maxi") */}
-        <FaqChatbot />
-
-        {/* 9. High-Conversion Lead Capture Form with File Upload & Confetti */}
-        <LeadForm />
+        {/* 8. Formulario de contacto y captura con subida de factura */}
+        <Formulario />
       </main>
 
-      {/* Institutional Legal Footer */}
+      {/* Pie de página institucional */}
       <Footer />
 
-      {/* Floating Action Button for WhatsApp & Quick Phone */}
-      <FloatingContact />
+      {/* Botón de contacto flotante (WhatsApp / Teléfono) */}
+      <ContactoFlotante />
     </div>
   );
 }

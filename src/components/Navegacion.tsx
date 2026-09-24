@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Logo } from "./Logo";
 import { Phone, ArrowRight, Menu, X, ShieldCheck, Sparkles } from "lucide-react";
 
-export const Navbar: React.FC = () => {
+export const Navegacion: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -17,17 +17,16 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: "Por qué EMAX", href: "#problema" },
-    { name: "Solución 360°", href: "#solucion" },
-    { name: "Simulador Ahorro", href: "#simulador" },
+    { name: "Inicio", href: "#" },
+    { name: "El Problema", href: "#problema" },
     { name: "Beneficios", href: "#beneficios" },
-    { name: "Cómo Funciona", href: "#como-funciona" },
-    { name: "Asistente IA / FAQ", href: "#faq-chatbot" },
+    { name: "Ahorrar en 3 Pasos", href: "#como-funciona" },
+    { name: "Simulador de Ahorro", href: "#simulador" },
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-      {/* Top micro-announcement bar */}
+      {/* Barra superior de microanuncios */}
       <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
           <div className="flex items-center gap-2">
@@ -60,21 +59,20 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Main navigation */}
+      {/* Navegación principal */}
       <div
-        className={`w-full transition-all duration-300 ${
-          isScrolled
+        className={`w-full transition-all duration-300 ${isScrolled
             ? "bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-slate-200/80"
             : "bg-white/80 backdrop-blur-sm py-4 border-b border-slate-100"
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logotipo */}
           <a href="#" className="focus:outline-none">
             <Logo variant="dark" />
           </a>
 
-          {/* Desktop Navigation Links */}
+          {/* Enlaces de navegación de escritorio */}
           <nav className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => (
               <a
@@ -88,7 +86,7 @@ export const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Right Action Button */}
+          {/* Botón de acción derecho */}
           <div className="hidden sm:flex items-center gap-3">
             <a
               href="#formulario"
@@ -99,7 +97,7 @@ export const Navbar: React.FC = () => {
             </a>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Botón de menú móvil */}
           <div className="flex lg:hidden items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -112,7 +110,7 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile dropdown */}
+        {/* Desplegable menú móvil */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-slate-100 bg-white/98 backdrop-blur-lg px-4 pt-3 pb-6 shadow-xl animate-in fade-in slide-in-from-top-4 duration-200">
             <div className="flex flex-col space-y-3 pt-2">

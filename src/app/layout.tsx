@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-sans",
-});
 
 export const metadata: Metadata = {
   title: "Grupo EMAX | Ahorra hasta un 40% en tu Factura de Luz y Gas",
@@ -39,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${plusJakarta.variable} scroll-smooth`}>
+    <html lang="es" className="scroll-smooth">
       <body className="min-h-screen font-sans bg-slate-50 text-slate-900 antialiased selection:bg-sky-500 selection:text-white">
         {children}
       </body>

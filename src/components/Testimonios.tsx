@@ -3,7 +3,7 @@
 import React from "react";
 import { Star, Quote, TrendingDown, Building, Home, UtensilsCrossed } from "lucide-react";
 
-export const Testimonials: React.FC = () => {
+export const Testimonios: React.FC = () => {
   const reviews = [
     {
       name: "Laura & David Gómez",
@@ -37,7 +37,7 @@ export const Testimonials: React.FC = () => {
   return (
     <section className="py-20 md:py-28 bg-white border-b border-slate-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Encabezado de la sección */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold uppercase tracking-wider mb-4">
             <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
@@ -54,7 +54,7 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
+        {/* Cuadrícula de testimonios */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {reviews.map((rev, index) => {
             const Icon = rev.icon;
@@ -64,7 +64,7 @@ export const Testimonials: React.FC = () => {
                 className="rounded-3xl bg-slate-50 border border-slate-200 p-8 flex flex-col justify-between hover:shadow-xl hover:bg-white transition-all duration-300 relative group"
               >
                 <div>
-                  {/* Top rating & quote mark */}
+                  {/* Calificación y comillas */}
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-1 text-amber-400">
                       {[...Array(rev.rating)].map((_, i) => (
@@ -74,7 +74,7 @@ export const Testimonials: React.FC = () => {
                     <Quote className="w-8 h-8 text-slate-200 group-hover:text-sky-200 transition-colors" />
                   </div>
 
-                  {/* Savings highlighted badge */}
+                  {/* Insignia destacada de ahorro */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-bold mb-4">
                     <TrendingDown className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Ahorro certificado: {rev.savings}</span>

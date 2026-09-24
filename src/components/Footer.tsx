@@ -7,10 +7,10 @@ import { Phone, Mail, MapPin, ShieldCheck, Heart } from "lucide-react";
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-slate-950 text-slate-400 text-sm border-t border-slate-800">
-      {/* Upper Footer: Main columns */}
+      {/* Pie de página superior: Columnas principales */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          {/* Brand info */}
+          {/* Información de la marca */}
           <div className="lg:col-span-2 space-y-4">
             <Logo variant="light" />
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Enlaces rápidos */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               Navegación
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Servicios */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               Soluciones Energéticas
@@ -100,7 +100,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Direct Contact */}
+          {/* Contacto directo */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               Atención al Cliente
@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Legal & Copyright Bar */}
+      {/* Barra legal y derechos de autor */}
       <div className="border-t border-slate-900 py-8 px-4 sm:px-6 lg:px-8 bg-slate-950/80">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>
