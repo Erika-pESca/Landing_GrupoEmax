@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-slate-950 text-slate-400 text-sm border-t border-slate-800">
       {/* Pie de página superior: Columnas principales */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Información de la marca */}
           <div className="lg:col-span-2 space-y-4">
@@ -108,8 +108,8 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <a href="tel:+34900831204" className="hover:text-white transition-colors">
-                  900 831 204 <span className="text-[10px] text-emerald-400">(Llamada gratis)</span>
+                <a href="tel:+34692427690" className="hover:text-white transition-colors">
+                  +34 692 42 76 90 <span className="text-[10px] text-emerald-400">(Atención directa)</span>
                 </a>
               </li>
               <li className="flex items-center gap-2">
@@ -136,12 +136,12 @@ export const Footer: React.FC = () => {
 
       {/* Barra legal y derechos de autor */}
       <div className="border-t border-slate-900 py-8 px-4 sm:px-6 lg:px-8 bg-slate-950/80">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center md:text-left">
           <p>
             © {new Date().getFullYear()} Grupo EMAX. Todos los derechos reservados. Operado por Metamorfosis Energética S.L.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 sm:gap-6">
             <a href="#aviso-legal" className="hover:text-slate-300 transition-colors">
               Aviso Legal
             </a>

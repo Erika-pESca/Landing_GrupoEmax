@@ -168,7 +168,32 @@ export const ChatbotAsistente: React.FC = () => {
     setIsTyping(true);
 
     setTimeout(() => {
-      // Buscar coincidencia en las preguntas frecuentes
+      // 1. Mensaje predeterminado cuando el usuario saluda ("hola", "buenas", etc.)
+      const esSaludo =
+        query === "hola" ||
+        query.startsWith("hola") ||
+        query.includes("hola") ||
+        query.includes("buenas") ||
+        query.includes("buenos días") ||
+        query.includes("buenos dias") ||
+        query.includes("saludos");
+
+      if (esSaludo) {
+        const botMsg: ChatMessage = {
+          id: `bot-${Date.now()}`,
+          sender: "bot",
+          text: "¡Hola! 👋 Qué alegría saludarte. Soy **Maxi**, tu asesor de Grupo EMAX.\n\nEstoy aquí para ayudarte a pagar lo justo en tu factura de luz y gas. Puedes preguntarme sobre cómo ahorrar hasta un 40%, ajustar tu potencia o solicitar una auditoría gratuita sin ningún coste ni permanencia.\n\n¿En qué te puedo ayudar hoy?",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          actionText: "Solicitar estudio gratuito 0 €",
+          actionHref: "#formulario",
+        };
+
+        setMessages((prev) => [...prev, botMsg]);
+        setIsTyping(false);
+        return;
+      }
+
+      // 2. Buscar coincidencia en las preguntas frecuentes
       const matchedFaq = FAQ_DATA.find((faq) =>
         query.split(" ").some(
           (word) =>
@@ -189,7 +214,7 @@ export const ChatbotAsistente: React.FC = () => {
         actionHref = matchedFaq.actionHref;
       } else {
         replyText =
-          "¡Gracias por tu consulta! Cada instalación o factura puede tener particularidades específicas. Si quieres una respuesta detallada adaptada a tu suministro, puedes solicitar la revisión gratuita en nuestro formulario o llamarnos al 900 831 204.";
+          "¡Gracias por tu consulta! Cada instalación o factura puede tener particularidades específicas. Si quieres una respuesta detallada adaptada a tu suministro, puedes solicitar la revisión gratuita en nuestro formulario o llamarnos al +34 692 42 76 90.";
         actionText = "Hablar con un asesor humano";
         actionHref = "#formulario";
       }
@@ -205,7 +230,7 @@ export const ChatbotAsistente: React.FC = () => {
 
       setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
-    }, 700);
+    }, 600);
   };
 
   const handleResetChat = () => {
@@ -278,10 +303,12 @@ export const ChatbotAsistente: React.FC = () => {
             <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-white p-4 sm:p-5 flex items-center justify-between border-b border-slate-800">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-500 to-cyan-400 p-[2px] shadow-sm">
-                    <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-cyan-400">
-                      <Bot className="w-6 h-6" />
-                    </div>
+                  <div className="w-12 h-12 rounded-full border-2 border-cyan-400 p-0.5 bg-slate-800 overflow-hidden shadow-md">
+                    <img
+                      src="/imagenes/avatar_chatbot.jpg"
+                      alt="Maxi Asistente IA EMAX"
+                      className="w-full h-full object-cover rounded-full"
+                    />
                   </div>
                   <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-slate-900 flex items-center justify-center">
                     <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
@@ -349,8 +376,12 @@ export const ChatbotAsistente: React.FC = () => {
                     }`}
                   >
                     {isBot && (
-                      <div className="w-8 h-8 rounded-xl bg-sky-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm mt-0.5">
-                        <Bot className="w-4 h-4" />
+                      <div className="w-8 h-8 rounded-full border border-cyan-400/60 overflow-hidden flex-shrink-0 shadow-sm mt-0.5">
+                        <img
+                          src="/imagenes/avatar_chatbot.jpg"
+                          alt="Maxi"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     )}
 
@@ -393,8 +424,12 @@ export const ChatbotAsistente: React.FC = () => {
               {/* Live typing indicator */}
               {isTyping && (
                 <div className="flex items-center gap-2 text-slate-400 text-xs pl-1">
-                  <div className="w-8 h-8 rounded-xl bg-sky-600/10 text-sky-600 flex items-center justify-center">
-                    <Bot className="w-4 h-4 animate-pulse" />
+                  <div className="w-8 h-8 rounded-full border border-cyan-400/60 overflow-hidden flex-shrink-0">
+                    <img
+                      src="/imagenes/avatar_chatbot.jpg"
+                      alt="Maxi"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-xs flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce"></span>

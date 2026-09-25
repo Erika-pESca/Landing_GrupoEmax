@@ -19,8 +19,8 @@ export const Navegacion: React.FC = () => {
   const navLinks = [
     { name: "Inicio", href: "#" },
     { name: "El Problema", href: "#problema" },
+    { name: "Soluciones", href: "#solucion" },
     { name: "Beneficios", href: "#beneficios" },
-    { name: "Ahorrar en 3 Pasos", href: "#como-funciona" },
     { name: "Simulador de Ahorro", href: "#simulador" },
   ];
 
@@ -42,11 +42,11 @@ export const Navegacion: React.FC = () => {
 
           <div className="flex items-center gap-4">
             <a
-              href="tel:+34900831204"
+              href="tel:+34692427690"
               className="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-sky-400" />
-              <span className="font-semibold text-slate-200">900 831 204</span>
+              <span className="font-semibold text-slate-200">+34 692 42 76 90</span>
               <span className="text-[10px] bg-sky-950 text-sky-300 border border-sky-800/60 rounded px-1.5 py-0.5">
                 Gratuito
               </span>
@@ -134,11 +134,11 @@ export const Navegacion: React.FC = () => {
                   <ArrowRight className="w-4 h-4" />
                 </a>
                 <a
-                  href="tel:+34900831204"
+                  href="tel:+34692427690"
                   className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 text-center transition-colors"
                 >
                   <Phone className="w-4 h-4 text-sky-600" />
-                  Llamar gratis al 900 831 204
+                  Llamar al +34 692 42 76 90
                 </a>
               </div>
             </div>

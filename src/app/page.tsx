@@ -29,13 +29,13 @@ export default function Home() {
         {/* 4. Simulador interactivo de ahorro energético */}
         <SimuladorAhorro />
 
-        {/* 5. Beneficios clave y Cómo Funciona combinados */}
+        {/* 5. El Método EMAX: Pasos y Beneficios unificados */}
         <Beneficios />
 
-        {/* 7. Casos reales y testimonios */}
+        {/* 6. Casos reales y testimonios */}
         <Testimonios />
 
-        {/* 8. Formulario de contacto y captura con subida de factura */}
+        {/* 7. Formulario de contacto y captura con subida de factura */}
         <Formulario />
       </main>
 

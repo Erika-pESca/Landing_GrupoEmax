@@ -1,12 +1,27 @@
 "use client";
 
 import React, { useState } from "react";
-import { Zap, Flame, Sparkles, Building2, Home, TrendingDown, ArrowRight, PiggyBank } from "lucide-react";
+import {
+  Zap,
+  Flame,
+  Sparkles,
+  Building2,
+  Home,
+  TrendingDown,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Calendar,
+  Plane,
+  Leaf,
+  DollarSign,
+} from "lucide-react";
 
 export const SimuladorAhorro: React.FC = () => {
   const [clientType, setClientType] = useState<"particular" | "empresa">("particular");
   const [supplyType, setSupplyType] = useState<"luz" | "gas" | "dual">("dual");
   const [monthlySpend, setMonthlySpend] = useState<number>(120);
+  const [selectedYears, setSelectedYears] = useState<1 | 3 | 5>(3);
 
   // Cambiar valores por defecto según el tipo de cliente
   const handleClientTypeChange = (type: "particular" | "empresa") => {
@@ -18,258 +33,394 @@ export const SimuladorAhorro: React.FC = () => {
     }
   };
 
-  // Porcentajes de estimación de ahorro
-  const savingsRate = clientType === "particular" ? 0.32 : 0.36; // 32% a 36%
+  // Porcentajes de estimación de ahorro según tipo de cliente y suministro
+  const baseRate = clientType === "particular" ? 0.32 : 0.36;
+  const supplyBonus = supplyType === "dual" ? 0.03 : supplyType === "luz" ? 0.01 : 0;
+  const savingsRate = Math.min(0.42, baseRate + supplyBonus);
+
   const monthlySavings = Math.round(monthlySpend * savingsRate);
   const annualSavings = monthlySavings * 12;
+  const periodSavings = annualSavings * selectedYears;
   const newEstimatedBill = Math.round(monthlySpend - monthlySavings);
+  const percentageSaved = Math.round(savingsRate * 100);
+  const co2Saved = Math.round((annualSavings / 100) * 85 * selectedYears);
 
   // RANGOS
   const minRange = clientType === "particular" ? 40 : 150;
-  const maxRange = clientType === "particular" ? 450 : 2500;
+  const maxRange = clientType === "particular" ? 400 : 2500;
   const step = clientType === "particular" ? 10 : 50;
 
-  // Lógica para gráfica de Barras de Ahorro Acumulado (1 a 5 años)
-  const chartYears = [1, 2, 3, 4, 5];
-  const savingsData = chartYears.map(year => annualSavings * year);
-  
-  // El tope del eje Y se basa en el ahorro MÁXIMO posible con el slider a tope (a 5 años)
-  const maxPossibleAnnualSavings = Math.round(maxRange * savingsRate) * 12;
-  const maxChartY = (maxPossibleAnnualSavings * 5) * 1.1; // 10% padding extra
+  // Presets rápidos para interactuar con 1 clic
+  const presets =
+    clientType === "particular" ? [60, 90, 120, 180, 250] : [300, 600, 1000, 1500, 2200];
+
+  // Cálculo del porcentaje de llenado del slider
+  const sliderProgress = ((monthlySpend - minRange) / (maxRange - minRange)) * 100;
+
+  // Impacto tangible en la vida real
+  const getTangibleImpact = () => {
+    if (annualSavings < 400) {
+      return "Equivale a pagar toda tu conexión a internet del año o casi 3 meses de electricidad completamente gratis.";
+    } else if (annualSavings < 900) {
+      return "Equivale a unas vacaciones familiares de verano o a 4 meses de factura eléctrica pagados al 100%.";
+    } else if (annualSavings < 2500) {
+      return "Equivale a renovar electrodomésticos de máxima eficiencia A+++ o una escapada internacional.";
+    } else {
+      return "Equivale a una importante inyección de liquidez neta para tu negocio o amortizar placas solares en tiempo récord.";
+    }
+  };
 
   return (
-    <section id="simulador" className="py-16 md:py-24 bg-slate-50 relative overflow-hidden border-y border-slate-200">
-      
-      {/* Fondo ultra limpio con toques de color sutiles y manchas brillantes */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-200/40 rounded-full blur-[100px] pointer-events-none -translate-y-1/3 translate-x-1/3" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-200/30 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/3" />
+    <section id="simulador" className="py-10 md:py-14 bg-slate-50 relative overflow-hidden border-y border-slate-200/80">
+      {/* Luces y auras de fondo */}
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-sky-200/30 rounded-full blur-[120px] pointer-events-none -translate-y-1/3" />
+      <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-emerald-200/25 rounded-full blur-[120px] pointer-events-none translate-y-1/3" />
 
-      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
-        
-        {/* Encabezado */}
-        <div className="text-center max-w-3xl mx-auto mb-14 md:mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Encabezado elegante */}
+        <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-100 border border-sky-200 text-sky-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <Zap className="w-3.5 h-3.5 text-sky-600 fill-sky-600/20" />
+            Simulador de Ahorro Inteligente en Tiempo Real
+          </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-            Descubre tu ahorro en <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-cyan-500">tiempo real</span>
+            Calcula cuánto dinero estás{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-cyan-500 to-emerald-500">
+              perdiendo cada mes
+            </span>
           </h2>
-          <p className="text-base md:text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            Ajusta tu consumo actual y descubre cuánto dinero dejarás de perder si te cambias a EMAX hoy mismo.
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Ajusta los parámetros según tu factura habitual y comprueba en vivo la optimización exacta que podemos lograr para ti.
           </p>
         </div>
 
-        {/* Layout Principal 50/50 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-          
+        {/* Layout 50/50: Panel de Control (Blanco) vs Dashboard FinTech (Oscuro estilo Hero) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
           {/* ========================================================
-              LADO IZQUIERDO: FORMULARIO INTERACTIVO (Colorido)
+              LADO IZQUIERDO: CONSOLA DE ENTRADA (Blanca, limpia, moderna)
               ======================================================== */}
-          <div className="flex flex-col space-y-8 bg-white p-6 sm:p-10 rounded-[2.5rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            
-            {/* 1. Tipo de inmueble */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
-                1. ¿Para qué tipo de inmueble es?
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => handleClientTypeChange("particular")}
-                  className={`flex flex-col items-center justify-center gap-3 p-5 sm:p-6 rounded-2xl border-2 transition-all duration-300 ${
-                    clientType === "particular"
-                      ? "bg-gradient-to-br from-sky-600 to-cyan-500 border-transparent text-white shadow-lg shadow-sky-500/30 scale-[1.02]"
-                      : "bg-slate-50 border-slate-200 text-slate-400 hover:border-sky-300 hover:text-sky-600"
-                  }`}
-                >
-                  <Home className="w-8 h-8 sm:w-10 sm:h-10" />
-                  <span className="text-base font-bold">Hogar</span>
-                </button>
+          <div className="lg:col-span-6 flex flex-col justify-between bg-white p-7 sm:p-9 rounded-3xl border border-slate-200 shadow-sm hover:border-slate-300 transition-all duration-300">
+            <div className="space-y-8">
+              {/* 1. Tipo de inmueble */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center justify-between">
+                  <span>1. ¿Para qué tipo de inmueble es?</span>
+                  <span className="text-[11px] font-normal text-slate-400">Selecciona uno</span>
+                </label>
 
-                <button
-                  type="button"
-                  onClick={() => handleClientTypeChange("empresa")}
-                  className={`flex flex-col items-center justify-center gap-3 p-5 sm:p-6 rounded-2xl border-2 transition-all duration-300 ${
-                    clientType === "empresa"
-                      ? "bg-gradient-to-br from-sky-600 to-cyan-500 border-transparent text-white shadow-lg shadow-sky-500/30 scale-[1.02]"
-                      : "bg-slate-50 border-slate-200 text-slate-400 hover:border-sky-300 hover:text-sky-600"
-                  }`}
-                >
-                  <Building2 className="w-8 h-8 sm:w-10 sm:h-10" />
-                  <span className="text-base font-bold">Empresa</span>
-                </button>
-              </div>
-            </div>
-
-            {/* 2. Tipo de suministro */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
-                2. ¿Qué suministro deseas optimizar?
-              </label>
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { id: "luz", label: "Energía", icon: Zap, activeColor: "text-amber-300" },
-                  { id: "gas", label: "Gas", icon: Flame, activeColor: "text-orange-300" },
-                  { id: "dual", label: "Ambos", icon: Sparkles, activeColor: "text-white" },
-                ].map((supply) => {
-                  const Icon = supply.icon;
-                  const isSelected = supplyType === supply.id;
-                  return (
-                    <button
-                      key={supply.id}
-                      type="button"
-                      onClick={() => setSupplyType(supply.id as any)}
-                      className={`flex flex-col items-center justify-center gap-2 py-5 px-2 rounded-2xl border-2 transition-all duration-300 ${
-                        isSelected
-                          ? "bg-slate-900 border-slate-900 text-white shadow-lg scale-[1.02]"
-                          : "bg-slate-50 border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600"
+                <div className="grid grid-cols-2 gap-3.5">
+                  <button
+                    type="button"
+                    onClick={() => handleClientTypeChange("particular")}
+                    className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all duration-200 ${
+                      clientType === "particular"
+                        ? "bg-sky-50/80 border-sky-600 text-sky-950 font-bold shadow-sm"
+                        : "bg-slate-50/60 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300"
+                    }`}
+                  >
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                        clientType === "particular"
+                          ? "bg-sky-600 text-white shadow-sm"
+                          : "bg-white text-slate-400 border border-slate-200"
                       }`}
                     >
-                      <Icon className={`w-7 h-7 sm:w-8 sm:h-8 ${isSelected ? supply.activeColor : ""}`} />
-                      <span className="text-xs sm:text-sm font-bold">{supply.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+                      <Home className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block text-sm font-bold leading-tight">Hogar</span>
+                      <span className="text-[11px] font-normal text-slate-500">Particular</span>
+                    </div>
+                  </button>
 
-            {/* 3. Slider Interactivo */}
-            <div className="bg-gradient-to-br from-slate-50 to-sky-50 p-6 sm:p-8 rounded-[2rem] border border-sky-100 shadow-inner relative">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-sky-600 mb-2">
-                    3. Tu Gasto Mensual Actual
+                  <button
+                    type="button"
+                    onClick={() => handleClientTypeChange("empresa")}
+                    className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all duration-200 ${
+                      clientType === "empresa"
+                        ? "bg-sky-50/80 border-sky-600 text-sky-950 font-bold shadow-sm"
+                        : "bg-slate-50/60 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300"
+                    }`}
+                  >
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                        clientType === "empresa"
+                          ? "bg-sky-600 text-white shadow-sm"
+                          : "bg-white text-slate-400 border border-slate-200"
+                      }`}
+                    >
+                      <Building2 className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block text-sm font-bold leading-tight">Negocio</span>
+                      <span className="text-[11px] font-normal text-slate-500">Pyme / Empresa</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. Suministro a optimizar (3 botones con armonía perfecta) */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center justify-between">
+                  <span>2. ¿Qué suministro deseas optimizar?</span>
+                  <span className="text-[11px] font-medium text-emerald-600">Dual = Máximo Ahorro</span>
+                </label>
+
+                <div className="grid grid-cols-3 gap-2.5">
+                  {[
+                    { id: "luz", label: "Solo Luz", icon: Zap, sub: "Electricidad" },
+                    { id: "gas", label: "Solo Gas", icon: Flame, sub: "Gas Natural" },
+                    { id: "dual", label: "Luz + Gas", icon: Sparkles, sub: "Recomendado" },
+                  ].map((supply) => {
+                    const Icon = supply.icon;
+                    const isSelected = supplyType === supply.id;
+                    return (
+                      <button
+                        key={supply.id}
+                        type="button"
+                        onClick={() => setSupplyType(supply.id as any)}
+                        className={`flex flex-col items-center justify-center py-3.5 px-2 rounded-2xl border-2 transition-all duration-200 ${
+                          isSelected
+                            ? "bg-sky-50/90 border-sky-600 text-sky-950 font-bold shadow-xs scale-[1.02]"
+                            : "bg-slate-50/60 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300"
+                        }`}
+                      >
+                        <Icon
+                          className={`w-5 h-5 mb-1.5 ${
+                            isSelected ? "text-sky-600" : "text-slate-400"
+                          }`}
+                        />
+                        <span className="text-xs sm:text-sm font-bold leading-tight">
+                          {supply.label}
+                        </span>
+                        <span
+                          className={`text-[10px] mt-0.5 ${
+                            isSelected ? "text-sky-700 font-semibold" : "text-slate-400"
+                          }`}
+                        >
+                          {supply.sub}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. Slider Interactivo con Presets */}
+              <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                    3. Gasto mensual aproximado
                   </label>
-                  <div className="inline-flex items-center gap-1.5 text-rose-600 text-xs font-bold bg-white px-3 py-1.5 rounded-lg shadow-sm border border-rose-100 animate-pulse">
-                    <TrendingDown className="w-3.5 h-3.5" />
-                    <span>¡Estás regalando ~{annualSavings} € al año!</span>
+                  <div className="flex items-baseline gap-1 bg-white px-3 py-1 rounded-xl border border-slate-200 shadow-2xs">
+                    <span className="text-2xl font-black text-slate-900 tracking-tight">
+                      {monthlySpend} €
+                    </span>
+                    <span className="text-xs font-semibold text-slate-500">/mes</span>
                   </div>
                 </div>
-                <div className="text-4xl font-black text-sky-900">
-                  {monthlySpend} €
-                  <span className="text-base font-medium text-sky-600/70 ml-1">/mes</span>
+
+                {/* Range Input con relleno visual dinámico */}
+                <div className="relative py-2">
+                  <input
+                    type="range"
+                    min={minRange}
+                    max={maxRange}
+                    step={step}
+                    value={monthlySpend}
+                    onChange={(e) => setMonthlySpend(Number(e.target.value))}
+                    style={{
+                      background: `linear-gradient(to right, #0284c7 0%, #06b6d4 ${sliderProgress}%, #e2e8f0 ${sliderProgress}%, #e2e8f0 100%)`,
+                    }}
+                    className="w-full h-3 rounded-full appearance-none cursor-pointer accent-sky-600 focus:outline-none transition-all"
+                  />
                 </div>
-              </div>
 
-              <div className="relative w-full py-4">
-                <input
-                  type="range"
-                  min={minRange}
-                  max={maxRange}
-                  step={step}
-                  value={monthlySpend}
-                  onChange={(e) => setMonthlySpend(Number(e.target.value))}
-                  className="w-full h-4 bg-white border border-slate-200 rounded-full appearance-none cursor-pointer accent-sky-500 hover:accent-sky-400 focus:outline-none focus:ring-4 focus:ring-sky-500/40 shadow-inner transition-all"
-                />
-              </div>
+                <div className="flex justify-between text-[11px] text-slate-400 font-semibold mt-1">
+                  <span>{minRange} €/mes</span>
+                  <span className="text-slate-500">Mueve el control</span>
+                  <span>{maxRange} €/mes</span>
+                </div>
 
-              <div className="flex justify-between text-xs text-sky-600/60 font-bold mt-2">
-                <span>{minRange} €</span>
-                <span>Arrastra el círculo</span>
-                <span>{maxRange} €</span>
+                {/* Botones de Presets Rápidos */}
+                <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center gap-2 overflow-x-auto pb-1">
+                  <span className="text-[11px] font-bold text-slate-500 flex-shrink-0">
+                    Accesos rápidos:
+                  </span>
+                  {presets.map((val) => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setMonthlySpend(val)}
+                      className={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all flex-shrink-0 border ${
+                        monthlySpend === val
+                          ? "bg-sky-600 text-white border-sky-600 shadow-xs"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-100"
+                      }`}
+                    >
+                      {val} €
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
+            {/* Micro garantía al pie de la consola */}
+            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span className="flex items-center gap-1.5 text-emerald-600 font-semibold">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Cálculo basado en tarifas reguladas y libres reales (CNMC)
+              </span>
+            </div>
           </div>
 
           {/* ========================================================
-              LADO DERECHO: GRÁFICA DE BARRAS DE AHORRO ACUMULADO
+              LADO DERECHO: DASHBOARD FINTECH OSCURO (Estilo Hero)
               ======================================================== */}
-          <div className="flex flex-col h-full bg-white border border-slate-100 rounded-[2.5rem] p-6 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
-            
-            {/* Cabecera Resultados */}
-            <div className="mb-8 relative z-10 flex flex-col items-center text-center">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-50 text-sky-600 text-sm font-bold uppercase tracking-widest mb-4 border border-sky-100">
-                <PiggyBank className="w-4 h-4" /> Dinero Recuperado con EMAX
-              </span>
-              <div className="text-[4rem] sm:text-6xl leading-none font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-cyan-400 drop-shadow-sm tracking-tight mb-4">
-                +{annualSavings} € <span className="text-2xl text-slate-400 font-medium tracking-normal">/año</span>
-              </div>
-              <p className="text-base text-slate-500 font-medium">
-                Pagarías aprox. <strong className="text-slate-900 bg-slate-50 px-2 py-1 rounded-md border border-slate-200">{newEstimatedBill} €/mes</strong> (Ahorras {monthlySavings}€ todos los meses).
-              </p>
-            </div>
+          <div className="lg:col-span-6 relative group flex flex-col justify-between">
+            {/* Halo de resplandor ambiental idéntico al Hero */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/30 via-cyan-500/25 to-emerald-500/25 rounded-[2.5rem] blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-            {/* Gráfico SVG de Barras (Crece dinámicamente) */}
-            <div className="bg-slate-50 p-5 sm:p-8 rounded-[2rem] border border-slate-100 shadow-inner flex-grow flex flex-col justify-end relative z-10">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center mb-10">
-                Tu ahorro acumulado en 5 años
-              </div>
-              
-              <div className="relative w-full h-[220px] sm:h-[260px] flex items-end">
-                <svg viewBox="0 0 800 300" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-                  
-                  {/* Grid lines horizontales (Fondo) */}
-                  <line x1="0" y1="60" x2="800" y2="60" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4 4" />
-                  <line x1="0" y1="120" x2="800" y2="120" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4 4" />
-                  <line x1="0" y1="180" x2="800" y2="180" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4 4" />
-                  <line x1="0" y1="240" x2="800" y2="240" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4 4" />
-                  <line x1="0" y1="300" x2="800" y2="300" stroke="#cbd5e1" strokeWidth="2" />
+            <div className="relative h-full rounded-3xl bg-slate-900/95 border border-slate-700/80 p-7 sm:p-9 shadow-2xl backdrop-blur-xl flex flex-col justify-between overflow-hidden text-white">
+              {/* Cuadrícula decorativa sutil en el fondo */}
+              <div
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+                  backgroundSize: "24px 24px",
+                }}
+              />
+              <div className="absolute -right-20 -top-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-                  {/* Barras de Ahorro */}
-                  {savingsData.map((amount, i) => {
-                    const totalBars = 5;
-                    const spacing = 800 / totalBars;
-                    const barWidth = 60;
-                    const x = (i * spacing) + (spacing / 2) - (barWidth / 2);
-                    
-                    // Cálculo de altura dinámica. Usamos maxChartY para que no cambie la escala.
-                    const barHeight = (amount / maxChartY) * 280; 
-                    const y = 300 - barHeight;
+              <div className="relative z-10 space-y-6">
+                {/* Cabecera del Dashboard con Badge */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/90 text-cyan-300 text-xs font-semibold backdrop-blur-sm shadow-sm w-fit">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                    <span>Proyección de Ahorro Auditado</span>
+                  </div>
 
-                    return (
-                      <g key={i}>
-                        {/* Barra */}
-                        <rect 
-                          x={x} 
-                          y={y} 
-                          width={barWidth} 
-                          height={barHeight} 
-                          fill="url(#gradBar)" 
-                          rx="8" 
-                          className="transition-all duration-300 drop-shadow-md hover:opacity-80 cursor-pointer" 
-                        />
-                        
-                        {/* Texto flotante encima de la barra */}
-                        <text 
-                          x={x + barWidth / 2} 
-                          y={y - 15} 
-                          textAnchor="middle" 
-                          className="text-base sm:text-xl font-black fill-sky-600 transition-all duration-300"
+                  <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 rounded-full w-fit">
+                    Ahorro medio: -{percentageSaved}%
+                  </span>
+                </div>
+
+                {/* Gran cifra de Ahorro Proyectado */}
+                <div className="text-center sm:text-left py-2">
+                  <span className="text-xs font-bold uppercase tracking-widest text-slate-400 block mb-1">
+                    Dinero limpio que vuelve a tu bolsillo:
+                  </span>
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <span className="text-4xl sm:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 tracking-tight">
+                      +{periodSavings.toLocaleString("es-ES")} €
+                    </span>
+                    <span className="text-sm sm:text-base font-bold text-slate-400">
+                      en {selectedYears} {selectedYears === 1 ? "año" : "años"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Selector Interactivo de Periodo de Tiempo (Tabs) */}
+                <div>
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    <span>Periodo de proyección:</span>
+                    <span className="text-cyan-400 lowercase font-normal">haz clic para comparar</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 p-1.5 rounded-2xl bg-slate-800/80 border border-slate-700/80">
+                    {[
+                      { years: 1, label: "1 Año", extra: `+${annualSavings}€` },
+                      { years: 3, label: "3 Años", extra: `+${annualSavings * 3}€` },
+                      { years: 5, label: "5 Años", extra: `+${annualSavings * 5}€` },
+                    ].map((tab) => (
+                      <button
+                        key={tab.years}
+                        type="button"
+                        onClick={() => setSelectedYears(tab.years as any)}
+                        className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-bold transition-all ${
+                          selectedYears === tab.years
+                            ? "bg-gradient-to-r from-sky-500 to-cyan-500 text-white shadow-md shadow-sky-500/30 scale-[1.02]"
+                            : "text-slate-400 hover:text-white hover:bg-slate-700/40"
+                        }`}
+                      >
+                        <span>{tab.label}</span>
+                        <span
+                          className={`text-[10px] font-normal ${
+                            selectedYears === tab.years ? "text-cyan-100" : "text-slate-500"
+                          }`}
                         >
-                          +{amount.toLocaleString('es-ES')}€
-                        </text>
-                        
-                        {/* Etiqueta del Año (Eje X) */}
-                        <text 
-                          x={x + barWidth / 2} 
-                          y={325} 
-                          textAnchor="middle" 
-                          className="text-sm font-bold fill-slate-400"
-                        >
-                          Año {chartYears[i]}
-                        </text>
-                      </g>
-                    );
-                  })}
+                          {tab.extra}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                  <defs>
-                    <linearGradient id="gradBar" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0ea5e9" />    {/* Sky 500 */}
-                      <stop offset="100%" stopColor="#06b6d4" />  {/* Cyan 500 */}
-                    </linearGradient>
-                  </defs>
-                </svg>
+                {/* Comparativa "Antes vs Con EMAX" (Tarjetas modernas) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <div className="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold text-rose-300 uppercase tracking-wider block">
+                        Factura habitual
+                      </span>
+                      <span className="text-lg font-bold text-slate-400 line-through decoration-rose-500 decoration-2">
+                        {monthlySpend} €
+                        <span className="text-xs font-normal text-slate-500 ml-0.5">/mes</span>
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20">
+                      Antes
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-cyan-950/30 border border-emerald-500/40 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block">
+                        Con Solución EMAX
+                      </span>
+                      <span className="text-xl font-black text-white">
+                        {newEstimatedBill} €
+                        <span className="text-xs font-normal text-slate-400 ml-0.5">/mes</span>
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/30">
+                      Ahorras {monthlySavings}€/m
+                    </span>
+                  </div>
+                </div>
+
+                {/* Impacto Tangible en la vida real */}
+                <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/60 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Plane className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-300 block mb-0.5">
+                      Impacto real en tu economía
+                    </span>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {getTangibleImpact()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botón CTA Principal con Resplandor Eléctrico */}
+              <div className="relative z-10 pt-6 mt-6 border-t border-slate-800">
+                <a
+                  href="#formulario"
+                  className="group w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-base text-white bg-gradient-to-r from-sky-500 via-cyan-500 to-emerald-500 hover:from-sky-600 hover:to-emerald-600 shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 text-center"
+                >
+                  <Zap className="w-5 h-5 text-amber-300 fill-amber-300/30 animate-bounce" />
+                  <span>Garantizar mis +{annualSavings.toLocaleString("es-ES")} € de Ahorro</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </a>
+
+                <p className="text-[11px] text-center text-slate-400 mt-2.5 flex items-center justify-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  Estudio 100% gratuito · Sin permanencia · Sin coste de intermediación
+                </p>
               </div>
             </div>
-
-            <div className="mt-8 relative z-10">
-              <a
-                href="#formulario"
-                className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-2xl font-bold text-base sm:text-lg text-white bg-gradient-to-r from-sky-600 to-cyan-500 hover:from-sky-500 hover:to-cyan-400 shadow-lg shadow-sky-500/30 transition-all duration-300 hover:-translate-y-1"
-              >
-                <span>Obtener mi estudio de ahorro GRATIS</span>
-                <ArrowRight className="w-5 h-5" />
-              </a>
-            </div>
-
           </div>
         </div>
       </div>
